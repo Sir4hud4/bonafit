@@ -3,427 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bonafit Payment - Transaksi Digital Cepat & Murah</title>
-    <!-- Load Tailwind CSS -->
+    <title>Bonafit Payment - Presentasi Digital</title>
+    <!-- Load Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configure Tailwind Colors & Font -->
+    <!-- Configure Tailwind for Custom Colors -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Skema Warna Brand Baru: Kuning Emas (Primary) dan Hitam (Dark)
-                        'bonafit-primary': '#FFC107', // Kuning Emas Cerah (Main Brand Color)
-                        'bonafit-accent': '#FFD54F',  // Kuning Lebih Muda
-                        'bonafit-dark': '#1F2937',    // Abu-abu Sangat Gelap / Hitam
-                        'bonafit-text': '#1F2937',    // Teks Hitam
-                        'bonafit-bg': '#F3F4F6',      // Background Light Gray
-                        'bonafit-light-bg': '#FFFFFF', // Background untuk bagian AI
+                        'bonafit-primary': '#FFC107',
+                        'bonafit-dark': '#1F2937',
+                        'bonafit-bg': '#F3F4F6',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
+                },
+            },
         }
     </script>
     <style>
-        /* Ensuring smooth scrolling */
-        html { scroll-behavior: smooth; }
+        /* Custom Styles for Presentation Feel */
+        .min-h-screen {
+            min-height: 100vh;
+        }
         
-        /* Glassmorphism Effect Class - Dibuat sedikit transparan agar menyatu */
-        .glass {
-            background-color: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* Updated AI Output for Chat Functionality */
+        .ai-output {
+            height: 350px; /* Fixed height for chat box feel */
+            overflow-y: auto;
+            white-space: pre-wrap;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0.75rem; /* Rounded corners inherited from parent */
         }
 
-        /* Adjusted Card Shadow for Glass elements */
-        .card-shadow-glass { 
-            /* Memberikan bayangan Kuning lembut */
-            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.2), 0 0 10px rgba(255, 255, 255, 0.5) inset; 
+        body {
+            font-family: 'Inter', sans-serif;
         }
-
-        /* Gradient background for Hero with image overlay (Inspired by uploaded image) */
-        .hero-bg-custom {
-            /* Fallback color */
-            background-color: #FFF3E0; 
-            /* MENGGUNAKAN GAMBAR UPLOADED: Gemini_Generated_Image_v582d8v582d8v582.jpg */
-            background-image: url('uploaded:Gemini_Generated_Image_v582d8v582d8v582.jpg-fb5e3f03-c8fa-4880-8287-fc3e1e1a8500'); 
+        /* Style to ensure background images cover the section */
+        .bg-cover-center {
             background-size: cover;
             background-position: center;
-            position: relative;
         }
-
-        /* Overlay to make text readable */
-        .hero-bg-custom::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            /* Overlay gradient from light yellow to white, adjusting transparency */
-            background: linear-gradient(to bottom, rgba(255, 245, 220, 0.95) 0%, rgba(255, 255, 255, 1) 100%);
-            /* Z-INDEX 1: Di belakang animasi, di atas background */
-            z-index: 1; 
-        }
-        
-        .hero-content {
-            /* Z-INDEX 3: Di atas segalanya agar teks mudah dibaca */
-            z-index: 3;
-            position: relative;
-        }
-        
-        /* Custom scrollbar for output area */
-        #ai-output::-webkit-scrollbar { width: 8px; }
-        #ai-output::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 4px; }
-        #ai-output::-webkit-scrollbar-track { background-color: #f3f4f6; }
-
-        /* Ensure text in dark section is readable */
-        .text-on-dark { color: #F3F4F6; }
-
-        /* --- START ANIMATION STYLES (Floating Transaction Icons) --- */
-        @keyframes floating-transactions {
-            /* Start from the bottom, small, invisible */
-            0% { transform: translateY(0vh) rotate(0deg) scale(0.6); opacity: 0; } 
-            /* Mid-point, fully visible */
-            50% { opacity: 0.5; } 
-            /* End at the top, larger, invisible */
-            100% { transform: translateY(-100vh) rotate(360deg) scale(1.2); opacity: 0; } 
-        }
-
-        #transaction-flow-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-            /* Z-INDEX 2: Di atas overlay, di bawah konten utama */
-            z-index: 2; 
-        }
-
-        #transaction-flow-container .item {
-            position: absolute;
-            color: #FFC107; /* Bonafit Primary */
-            font-size: clamp(20px, 3vw, 50px); /* Ukuran ikon yang responsif */
-            animation-name: floating-transactions;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-            opacity: 0;
-            /* Efek glowing kuning lembut agar menyatu dengan latar */
-            text-shadow: 0 0 8px rgba(255, 193, 7, 0.8), 0 0 15px rgba(255, 193, 7, 0.3);
-        }
-        /* --- END ANIMATION STYLES --- */
     </style>
 </head>
-<body class="font-sans bg-bonafit-bg text-bonafit-text">
+<body class="bg-bonafit-bg">
 
-    <!-- Header / Navigation Bar (Glassmorphism Applied) -->
-    <header class="sticky top-0 z-50 transition duration-300">
-        <div class="glass mx-auto mt-4 rounded-xl max-w-7xl px-4 sm:px-6 lg:px-8 card-shadow-glass">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo/Branding -->
-                <a href="#" class="text-2xl font-extrabold tracking-tight text-bonafit-dark">
-                    BONAFIT <span class="text-bonafit-primary">PAYMENT</span>
+    <!-- Slide 1: HERO (Introduction & The Big Promise) -->
+    <section id="hero" class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover-center" 
+        style="background-image: url('uploaded:Gemini_Generated_Image_lwgagolwgagolwga.jpg-f2bc62fa-9768-4f44-98ec-dd1c8631dc1c');">
+        
+        <!-- Dark Overlay for Readability (70% opacity) -->
+        <div class="absolute inset-0 bg-black opacity-70 z-0"></div>
+        
+        <!-- Decorative Circles (Background Element) -->
+        <div class="absolute top-[-100px] left-[-100px] w-64 h-64 bg-bonafit-primary opacity-20 rounded-full blur-3xl animate-pulse z-0"></div>
+        <div class="absolute bottom-[-100px] right-[-100px] w-80 h-80 bg-bonafit-primary opacity-15 rounded-full blur-3xl animate-pulse delay-300 z-0"></div>
+
+        <div class="relative z-10 max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center text-white">
+            <!-- Left: Text Content -->
+            <div class="text-center md:text-left space-y-6">
+                <p class="text-xl font-medium text-bonafit-primary tracking-widest uppercase">Bonafit Payment</p>
+                <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight">
+                    Profit Maksimal, <span class="text-bonafit-primary">Transaksi Instan.</span>
+                </h1>
+                <p class="text-lg text-gray-300">
+                    Platform PPOB terdepan yang menjamin kecepatan, harga modal termurah, dan stabilitas server 24/7.
+                </p>
+                <a href="#features" class="inline-block px-8 py-3 mt-4 text-lg font-bold rounded-full text-bonafit-dark bg-bonafit-primary hover:bg-yellow-600 transition duration-300 shadow-xl">
+                    Lihat Fitur Utama &rarr;
                 </a>
-                
-                <!-- CTA Button -->
-                <div class="flex items-center space-x-4">
-                    <a href="#download" class="px-4 py-2 text-sm font-semibold rounded-full text-bonafit-dark bg-bonafit-primary hover:bg-bonafit-accent transition duration-300 shadow-lg hover:shadow-xl">
-                        Unduh Aplikasi
-                    </a>
-                </div>
+            </div>
+            
+            <!-- Right: Visual Mockup -->
+            <div class="flex justify-center md:justify-end">
+                <img 
+                    src="https://placehold.co/400x800/FFC107/1F2937?text=Antarmuka+Aplikasi" 
+                    alt="Aplikasi Bonafit Payment di layar ponsel" 
+                    class="max-h-[75vh] w-auto rounded-[3rem] p-3 bg-bonafit-dark shadow-[0_20px_50px_rgba(255,193,7,0.5)] transform hover:scale-105 transition duration-500"
+                    style="border: 5px solid #FFC107;" 
+                    onerror="this.onerror=null;this.src='https://placehold.co/400x800/FFC107/1F2937?text=Mockup+Tidak+Ditemukan';"
+                />
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- 1. Hero Section - Menggunakan Custom Background, Animasi, dan Image Placeholder -->
-    <section class="hero-bg-custom pt-16 pb-24 sm:pt-24 lg:pt-32 -mt-20">
-        <!-- Kontainer Animasi Logo Transaksi -->
-        <div id="transaction-flow-container"></div>
+    <!-- Slide 2: FEATURES (The "What" - Core Services) - Background tetap solid/light untuk kontras dengan kartu putih -->
+    <section id="features" class="min-h-screen flex flex-col justify-center items-center bg-bonafit-bg p-8">
+        <div class="max-w-7xl text-center space-y-12">
+            <h2 class="text-5xl font-extrabold text-bonafit-dark">Katalog Produk Digital Terlengkap</h2>
+            <p class="text-xl text-gray-600 max-w-4xl mx-auto">Kami menyediakan inventaris digital terlengkap, memastikan agen selalu siap melayani segala kebutuhan pelanggan.</p>
 
-        <div class="hero-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center pt-20">
-            <!-- Text Content -->
-            <div class="text-center md:text-left">
-                <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-4">
-                    Kecepatan dan Harga <span class="text-bonafit-primary">Agen Terbaik</span> di Genggaman
-                </h1>
-                <p class="mt-3 text-xl text-gray-700 mb-8">
-                    Bonafit Payment adalah platform terdepan untuk segala kebutuhan digital (Pulsa, PPOB, Data, PLN). Mulai transaksi Anda hari ini dan rasakan keuntungannya!
-                </p>
-                <div class="flex justify-center md:justify-start space-x-4" id="download">
-                    <a href="https://play.google.com/store/apps/details?id=com.promedia.bonafitpayment" target="_blank" class="flex items-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl text-bonafit-dark bg-bonafit-primary hover:bg-bonafit-accent transition duration-300 transform hover:scale-[1.05] shadow-xl hover:shadow-2xl">
-                        <!-- Play Store Icon SVG -->
-                        <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M3 2v20l18-10L3 2zm6 15L6 14v-4l3 3.5V17zm9-7.5L12 16.2V7.8L18 10.5z"/></svg>
-                        Unduh di Google Play
-                    </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="text-5xl mb-4 p-2 inline-block rounded-full bg-bonafit-primary/20 text-red-500">📱</div>
+                    <h3 class="text-xl font-bold text-bonafit-dark mb-2">Pulsa & Data Instan</h3>
+                    <p class="text-gray-700 text-sm opacity-85">Harga modal terendah dan proses pengisian secepat kilat.</p>
                 </div>
-            </div>
-
-            <!-- Image Mockup (Glassmorphism Style) -->
-            <div class="flex justify-center md:justify-end">
-                <div class="w-72 h-[35rem] bg-bonafit-dark rounded-[3rem] p-4 transform rotate-3 shadow-2xl transition duration-500 hover:rotate-0 hover:scale-105">
-                    <!-- The inner screen uses a subtle glass effect on a darker background -->
-                    <div class="w-full h-full glass rounded-[2.5rem] flex flex-col items-center justify-center p-6 text-white font-bold text-opacity-90 border-bonafit-accent">
-                        <div class="text-5xl mb-4 text-bonafit-primary">BP</div>
-                        <p class="text-center text-xl tracking-wider text-white">Bonafit Payment</p>
-                        <p class="text-sm mt-2 opacity-70">Aplikasi PPOB Terpercaya</p>
-                        <!-- Simple visual representation of a transaction list -->
-                        <div class="mt-8 space-y-4 w-full px-4">
-                            <div class="h-3 bg-bonafit-primary/50 rounded-full w-3/4 mx-auto"></div>
-                            <div class="h-3 bg-bonafit-primary/20 rounded-full w-2/3 mx-auto"></div>
-                            <div class="h-3 bg-bonafit-primary/50 rounded-full w-4/5 mx-auto"></div>
-                        </div>
-                    </div>
+                <!-- Feature 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="text-5xl mb-4 p-2 inline-block rounded-full bg-bonafit-primary/20 text-yellow-500">⚡</div>
+                    <h3 class="text-xl font-bold text-bonafit-dark mb-2">PLN & Token 24/7</h3>
+                    <p class="text-gray-700 text-sm opacity-85">Layanan pembelian listrik yang stabil tanpa jam non-aktif.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="text-5xl mb-4 p-2 inline-block rounded-full bg-bonafit-primary/20 text-blue-500">💧</div>
+                    <h3 class="text-xl font-bold text-bonafit-dark mb-2">PPOB Terlengkap</h3>
+                    <p class="text-gray-700 text-sm opacity-85">Bayar PDAM, BPJS, Multifinance, hingga TV Kabel.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="text-5xl mb-4 p-2 inline-block rounded-full bg-bonafit-primary/20 text-indigo-500">💳</div>
+                    <h3 class="text-xl font-bold text-bonafit-dark mb-2">Top-Up E-Money</h3>
+                    <p class="text-gray-700 text-sm opacity-85">Semua dompet digital utama (OVO, Dana, GoPay) tersedia.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 2. Key Features / Core Services (Glassmorphism Applied) -->
-    <section class="py-24 bg-white" id="features">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Layanan Utama Super Lengkap</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Satu aplikasi untuk mengelola seluruh pembayaran dan transaksi digital Anda.</p>
-            </div>
+    <!-- Slide 3: WHY US (The "Why" - Trust and Reliability) -->
+    <section id="why-us" class="min-h-screen flex flex-col justify-center items-center p-8 relative overflow-hidden bg-cover-center" 
+        style="background-image: url('https://placehold.co/1920x1080/F3F4F6/1F2937?text=Tim+Profesional+Diskusi');">
 
-            <!-- Features Grid -->
-            <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <!-- Primary Overlay for Branding (80% opacity) -->
+        <div class="absolute inset-0 bg-bonafit-primary opacity-80 z-0"></div>
 
-                <!-- Feature 1: Pulsa & Data (Glass Card) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass transition duration-300 hover:scale-[1.02] border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/70 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Phone Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Pulsa & Paket Data</h3>
-                    <p class="text-gray-700 opacity-80">Isi ulang semua operator dengan proses instan dan harga modal terendah di pasar.</p>
+        <div class="relative z-10 max-w-6xl text-center space-y-12 text-bonafit-dark">
+            <h2 class="text-5xl font-extrabold">Mengapa Memilih Bonafit?</h2>
+            <p class="text-xl max-w-4xl mx-auto">Tiga janji utama kami kepada setiap agen yang bergabung.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- USP 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                    <div class="text-5xl font-extrabold text-bonafit-primary mb-4">🕒</div>
+                    <h3 class="text-xl font-bold mb-2">Jaminan Stabilitas Server</h3>
+                    <p class="text-gray-700 text-sm">Server yang stabil 99% uptime, transaksi diproses otomatis tanpa jeda.</p>
                 </div>
-
-                <!-- Feature 2: PLN Token & Tagihan (Glass Card) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass transition duration-300 hover:scale-[1.02] border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/70 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Lightning Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Token & Tagihan PLN</h3>
-                    <p class="text-gray-700 opacity-80">Pembayaran dan pembelian token listrik yang cepat, menghindari denda dan memastikan rumah tetap terang.</p>
+                <!-- USP 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                    <div class="text-5xl font-extrabold text-bonafit-primary mb-4">🔒</div>
+                    <h3 class="text-xl font-bold mb-2">Sistem Keamanan Berlapis</h3>
+                    <p class="text-gray-700 text-sm">Perlindungan dana dan data pribadi dengan enkripsi dan verifikasi PIN yang kuat.</p>
                 </div>
-
-                <!-- Feature 3: PPOB Lengkap (Glass Card) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass transition duration-300 hover:scale-[1.02] border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/70 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Invoice Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">PPOB dan E-Money</h3>
-                    <p class="text-gray-700 opacity-80">Bayar PDAM, BPJS, TV Kabel, hingga *top-up* saldo E-Money (OVO, GoPay, Dana) dalam sekejap.</p>
+                <!-- USP 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                    <div class="text-5xl font-extrabold text-bonafit-primary mb-4">💰</div>
+                    <h3 class="text-xl font-bold mb-2">Komisi Agen Terbaik</h3>
+                    <p class="text-gray-700 text-sm">Struktur harga dirancang untuk margin keuntungan tertinggi bagi agen kami.</p>
                 </div>
-
-                <!-- Feature 4: Harga Agen Terbaik (Glass Card) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass transition duration-300 hover:scale-[1.02] border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/70 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Money Bag Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Potensi Penghasilan Agen</h3>
-                    <p class="text-gray-700 opacity-80">Jual kembali produk digital dengan margin keuntungan tinggi. Bonafit, sesuai namanya!</p>
-                </div>
-
             </div>
         </div>
     </section>
     
-    <!-- 3. Gemini LLM Integration: Smart Agent Assistant -->
-    <section class="py-24 bg-bonafit-light-bg" id="ai-assistant">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h2 class="text-4xl font-bold text-bonafit-dark mb-4">✨ Asisten Agen Pintar Gemini</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-10">Dapatkan ide bisnis, tips profit, atau penjelasan cepat tentang istilah PPOB langsung dari AI!</p>
+    <!-- Slide 4: GEMINI AI ASSISTANT (Interactive Feature) - Background tetap solid/light -->
+    <section id="gemini-assistant" class="min-h-screen flex flex-col justify-center items-center bg-bonafit-bg p-8">
+        <div class="w-full max-w-4xl p-4 sm:p-6 rounded-3xl bg-white shadow-2xl border border-gray-200">
+            <h2 class="text-3xl font-bold text-bonafit-dark mb-4 text-center">💡 Asisten Bisnis Bertenaga AI (Customer Support)</h2>
+            <p class="text-lg text-gray-600 mb-6 text-center">Tanyakan tentang produk, status transaksi, atau masalah umum. Kami siap membantu!</p>
+
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-4">
+                <input type="text" id="prompt-input"
+                       placeholder="Contoh: Bagaimana cara top-up saldo? Atau, Pulsa saya belum masuk." 
+                       class="flex-grow p-3 rounded-xl border border-gray-300 focus:ring-bonafit-primary focus:border-bonafit-primary shadow-inner bg-gray-50 text-bonafit-dark"/>
+                
+                <button id="generate-button"
+                        class="flex-shrink-0 px-6 py-3 font-bold rounded-xl text-bonafit-dark bg-bonafit-primary hover:bg-yellow-600 transition duration-300 shadow-lg disabled:opacity-50">
+                    <span id="button-text">Tanya Gemini</span>
+                    <span id="loading-spinner" class="hidden flex items-center space-x-2">
+                        <svg class="animate-spin h-5 w-5 text-bonafit-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Memuat...</span>
+                    </span>
+                </button>
             </div>
 
-            <!-- AI Interface Card (Glassmorphism Applied) -->
-            <div class="glass p-6 sm:p-8 rounded-3xl card-shadow-glass">
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <input type="text" id="ai-prompt" placeholder="Contoh: Ide bisnis PPOB modal kecil? Atau, Apa itu Multifinance?" 
-                           class="flex-grow p-3 rounded-xl border border-bonafit-primary/50 focus:ring-bonafit-primary focus:border-bonafit-primary shadow-inner bg-white/90 text-bonafit-text">
-                    
-                    <button id="ai-generate-btn" onclick="generateIdea()" 
-                            class="flex-shrink-0 px-6 py-3 font-bold rounded-xl text-bonafit-dark bg-bonafit-primary hover:bg-bonafit-accent transition duration-300 shadow-md">
-                        <span id="btn-text">Tanya Gemini</span>
-                        <span id="btn-loader" class="hidden">
-                            <!-- Simple spinning loader SVG -->
-                            <svg class="animate-spin h-5 w-5 text-bonafit-dark inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Memuat...
-                        </span>
-                    </button>
-                </div>
-
-                <!-- AI Output Area -->
-                <div id="ai-output" class="mt-6 p-4 bg-white rounded-xl shadow-inner min-h-[150px] max-h-[300px] overflow-y-auto whitespace-pre-wrap text-gray-800 text-sm leading-relaxed">
-                    <!-- Default message -->
-                    <p class="text-center text-gray-500 italic">Jawaban akan muncul di sini.</p>
-                </div>
-                
-                <!-- Sources Area -->
-                <div id="ai-sources" class="mt-4 text-xs text-gray-500 hidden">
-                    <p class="font-semibold mb-1">Sumber (Grounded by Google Search):</p>
-                    <ul id="sources-list" class="list-disc pl-5 space-y-1"></ul>
-                </div>
+            <div id="output-area" class="ai-output p-4 bg-gray-50 rounded-xl shadow-inner min-h-[100px] text-gray-800 text-sm leading-relaxed border border-gray-200">
+                <!-- Chat history will be rendered here -->
+            </div>
+            
+            <div id="sources-container" class="mt-3 text-xs text-gray-500 hidden">
+                <p class="font-semibold mb-1">Sumber (Informasi Real-Time):</p>
+                <ul id="sources-list" class="list-disc pl-5 space-y-1"></ul>
             </div>
         </div>
     </section>
 
-    <!-- 4. Why Choose Bonafit? Section (Now Section 5) -->
-    <section class="py-24 bg-bonafit-dark" id="why-us">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center text-on-dark">
-                <h2 class="text-4xl font-bold mb-4">Keunggulan Yang Membuat Bonafit Berbeda</h2>
-                <p class="text-xl opacity-90 max-w-4xl mx-auto">Kami fokus pada tiga pilar utama untuk memastikan pengalaman terbaik bagi pengguna kami.</p>
-            </div>
+    <!-- Slide 5: FINAL CTA (Call to Action) -->
+    <section id="cta" class="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden bg-cover-center"
+        style="background-image: url('https://placehold.co/1920x1080/1F2937/FFC107?text=Grafik+Pertumbuhan+Sukses');">
 
-            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <!-- USP 1: 24/7 Reliability (Glass Card on Dark BG) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/90 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Clock Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Stabilitas 99%</h3>
-                    <p class="text-white opacity-70">Server yang stabil dan transaksi diproses secara otomatis 24 jam sehari, 7 hari seminggu.</p>
-                </div>
-                
-                <!-- USP 2: High Security (Glass Card on Dark BG) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/90 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Lock Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v3"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Keamanan Transaksi</h3>
-                    <p class="text-white opacity-70">Dana dan data pribadi Anda dilindungi dengan sistem enkripsi dan verifikasi PIN yang kuat.</p>
-                </div>
+        <!-- Dark Overlay for Readability (90% opacity) -->
+        <div class="absolute inset-0 bg-bonafit-dark opacity-90 z-0"></div>
 
-                <!-- USP 3: Dedicated Support (Glass Card on Dark BG) -->
-                <div class="glass p-8 rounded-2xl text-center card-shadow-glass border-t-4 border-bonafit-primary">
-                    <div class="p-4 inline-block rounded-full bg-bonafit-primary/90 text-bonafit-dark mb-4 shadow-lg">
-                        <!-- Headset Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm6 4l2 2 4-4"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Layanan Cepat Tanggap</h3>
-                    <p class="text-white opacity-70">Dukungan pelanggan responsif, siap membantu menyelesaikan masalah transaksi Anda dengan cepat.</p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. Final CTA Section (Repeating Download - Now Section 6) -->
-    <section class="py-20 bg-bonafit-bg">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Siap Memulai Transaksi Terbaik Anda?</h2>
-            <p class="text-xl text-gray-600 mb-8">Gabung dengan ribuan pengguna lain dan nikmati kemudahan Bonafit Payment hari ini juga!</p>
-            <a href="https://play.google.com/store/apps/details?id=com.promedia.bonafitpayment" target="_blank" class="flex items-center justify-center w-max mx-auto px-8 py-4 border border-transparent text-lg font-bold rounded-xl text-bonafit-dark bg-bonafit-primary hover:bg-bonafit-accent transition duration-300 transform hover:scale-[1.02] shadow-xl hover:shadow-2xl">
+        <div class="relative z-10 max-w-4xl text-center space-y-8 text-white">
+            <h2 class="text-5xl font-extrabold text-bonafit-primary">Siap Berubah?</h2>
+            <p class="text-2xl text-gray-300">
+                Waktunya beralih ke Bonafit Payment. Unduh aplikasi dan mulai maksimalkan profit bisnis PPOB Anda hari ini.
+            </p>
+            <a href="https://play.google.com/store/apps/details?id=com.promedia.bonafitpayment" target="_blank" class="inline-flex items-center justify-center px-12 py-5 text-2xl font-bold rounded-xl text-bonafit-dark bg-bonafit-primary hover:bg-yellow-600 transition duration-300 transform hover:scale-105 shadow-2xl">
                 <!-- Play Store Icon SVG -->
-                <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M3 2v20l18-10L3 2zm6 15L6 14v-4l3 3.5V17zm9-7.5L12 16.2V7.8L18 10.5z"/></svg>
-                Unduh Bonafit Payment Sekarang
+                <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M3 2v20l18-10L3 2zm6 15L6 14v-4l3 3.5V17zm9-7.5L12 16.2V7.8L18 10.5z"/></svg>
+                UNDUH SEKARANG
             </a>
+
+            <footer class="mt-16 pt-8 border-t border-gray-700 w-full">
+                <p class="text-sm text-gray-500">© <span id="current-year"></span> Bonafit Payment. Hak Cipta Dilindungi.</p>
+            </footer>
         </div>
     </section>
-
-    <!-- 6. Footer (Now Section 7) -->
-    <footer class="bg-bonafit-dark py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-400">
-                <!-- Branding -->
-                <div>
-                    <h3 class="text-xl font-extrabold tracking-tight text-bonafit-primary mb-4">BONAFIT PAYMENT</h3>
-                    <p class="text-sm text-white opacity-70">Solusi terbaik untuk semua transaksi PPOB, pulsa, dan tagihan Anda di Indonesia.</p>
-                </div>
-                
-                <!-- Nav Links -->
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Tautan Cepat</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#features" class="hover:text-bonafit-primary transition duration-200">Layanan</a></li>
-                        <li><a href="#ai-assistant" class="hover:text-bonafit-primary transition duration-200">Asisten AI</a></li>
-                        <li><a href="#why-us" class="hover:text-bonafit-primary transition duration-200">Keunggulan</a></li>
-                        <li><a href="https://play.google.com/store/apps/details?id=com.promedia.bonafitpayment" target="_blank" class="hover:text-bonafit-primary transition duration-200">Unduh Aplikasi</a></li>
-                    </ul>
-                </div>
-
-                <!-- Resources -->
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Informasi</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-bonafit-primary transition duration-200">Kebijakan Privasi</a></li>
-                        <li><a href="#" class="hover:text-bonafit-primary transition duration-200">Syarat & Ketentuan</a></li>
-                        <li><a href="#" class="hover:text-bonafit-primary transition duration-200">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact -->
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Hubungi Kami</h4>
-                    <p class="text-sm text-white opacity-70">Email: support@bonafitpayment.com (Contoh)</p>
-                    <p class="text-sm mt-2 text-white opacity-70">Dukungan CS tersedia di aplikasi.</p>
-                </div>
-            </div>
-
-            <!-- Copyright -->
-            <div class="mt-12 pt-6 border-t border-gray-700 text-center text-sm text-gray-500">
-                &copy; <span id="currentYear"></span> Bonafit Payment. All rights reserved.
-            </div>
-        </div>
-    </footer>
 
     <script>
-        // Set the current year in the footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        // --- GEMINI API INTEGRATION LOGIC ---
-
-        const aiPromptInput = document.getElementById('ai-prompt');
-        const aiGenerateBtn = document.getElementById('ai-generate-btn');
-        const aiOutputDiv = document.getElementById('ai-output');
-        const btnText = document.getElementById('btn-text');
-        const btnLoader = document.getElementById('btn-loader');
-        const sourcesList = document.getElementById('sources-list');
-        const aiSourcesDiv = document.getElementById('ai-sources');
-
-        // Handles API key for Canvas environment
-        const apiKey = ""; 
-        const API_MODEL = "gemini-2.5-flash-preview-05-20";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`;
+        // --- Global State & Configuration ---
         const MAX_RETRIES = 5;
+        const API_MODEL = "gemini-2.5-flash-preview-05-20";
+        // Kunci API Gemini akan otomatis ditambahkan oleh Canvas saat 'apiKey' kosong.
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`;
+
+        // State for Multi-turn Conversation
+        let chatHistory = []; 
+
+        // --- DOM Elements ---
+        const promptInput = document.getElementById('prompt-input');
+        const generateButton = document.getElementById('generate-button');
+        const buttonText = document.getElementById('button-text');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const outputArea = document.getElementById('output-area');
+        const sourcesContainer = document.getElementById('sources-container');
+        const sourcesList = document.getElementById('sources-list');
+        
+        // --- Helper Functions ---
 
         /**
-         * Executes fetch request with exponential backoff for resilience.
-         * @param {string} url - The API URL.
-         * @param {object} options - Fetch options (method, headers, body).
-         * @returns {Promise<Response>}
+         * Renders the entire chat history in the output area.
+         */
+        function renderChat() {
+            outputArea.innerHTML = ''; 
+            
+            if (chatHistory.length === 0) {
+                // Initial greeting when history is empty
+                const greeting = document.createElement('div');
+                greeting.className = 'text-center text-gray-500 italic p-4 text-sm';
+                greeting.textContent = "Halo! Saya Asisten AI Tim Customer Support Bonafit Payment. Ada yang bisa saya bantu terkait transaksi atau fitur hari ini?";
+                outputArea.appendChild(greeting);
+            }
+            
+            chatHistory.forEach(message => {
+                const role = message.role;
+                const text = message.parts[0].text;
+
+                const isUser = role === 'user';
+                // Styling for chat bubbles
+                const roleClass = isUser 
+                    ? 'bg-bonafit-primary text-bonafit-dark ml-auto' 
+                    : 'bg-gray-200 text-bonafit-dark mr-auto';
+                
+                const bubble = document.createElement('div');
+                bubble.className = `p-3 rounded-xl shadow-md ${roleClass} text-sm`;
+                bubble.style.maxWidth = '80%';
+                
+                // Format text to respect line breaks from the model response
+                const formattedText = text.replace(/\n/g, '<br>');
+                bubble.innerHTML = formattedText; 
+                
+                const container = document.createElement('div');
+                container.className = `flex ${isUser ? 'justify-end' : 'justify-start'} mb-3`;
+                container.appendChild(bubble);
+                
+                outputArea.appendChild(container);
+            });
+            
+            // Auto-scroll to the latest message
+            outputArea.scrollTop = outputArea.scrollHeight;
+        }
+
+        /**
+         * Executes fetch request with exponential backoff.
          */
         async function fetchWithExponentialBackoff(url, options) {
             for (let i = 0; i < MAX_RETRIES; i++) {
                 try {
                     const response = await fetch(url, options);
-                    if (response.status !== 429) { // Not a rate limit error
+                    if (response.status !== 429) {
                         return response;
                     }
-                    // If rate limited (429), retry with delay
                     const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                 } catch (error) {
-                    // For network errors, wait and retry
                     const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                 }
@@ -432,38 +302,48 @@
         }
 
         /**
-         * Main function to call Gemini API and generate the business idea.
+         * Handles the UI state during loading.
+         * @param {boolean} isLoading - true to show loading, false to hide.
+         */
+        function setLoadingState(isLoading) {
+            generateButton.disabled = isLoading;
+            promptInput.disabled = isLoading;
+            buttonText.classList.toggle('hidden', isLoading);
+            loadingSpinner.classList.toggle('hidden', !isLoading);
+        }
+
+        /**
+         * Main function to call Gemini API and maintain conversation history.
          */
         async function generateIdea() {
-            const userQuery = aiPromptInput.value.trim();
+            const userQuery = promptInput.value.trim();
             if (!userQuery) {
-                aiOutputDiv.innerHTML = '<p class="text-red-500 text-center">Masukkan pertanyaan atau ide yang ingin Anda tanyakan!</p>';
-                aiSourcesDiv.classList.add('hidden');
                 return;
             }
 
-            // UI state: Loading
-            aiGenerateBtn.disabled = true;
-            btnText.classList.add('hidden');
-            btnLoader.classList.remove('hidden');
-            aiOutputDiv.innerHTML = '<p class="text-center text-gray-500 italic">Menganalisis data PPOB dan merumuskan strategi...</p>';
-            aiSourcesDiv.classList.add('hidden');
-            sourcesList.innerHTML = '';
+            // 1. Add user message to history and clear input
+            chatHistory.push({ role: "user", parts: [{ text: userQuery }] });
+            promptInput.value = '';
 
+            // 2. Update UI with user message and show loading indicator
+            setLoadingState(true);
+            renderChat(); 
+            
+            const typingIndicator = document.createElement('div');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.className = 'text-left text-gray-500 italic mb-3 text-sm';
+            typingIndicator.textContent = 'Tim CS Bonafit sedang mengetik...';
+            outputArea.appendChild(typingIndicator);
+            outputArea.scrollTop = outputArea.scrollHeight;
 
-            // System Instruction: Act as a helpful PPOB business consultant for Bonafit Payment.
-            const systemPrompt = "Bertindak sebagai konsultan bisnis PPOB yang ramah dan ahli. Berikan saran bisnis yang dapat ditindaklanjuti, tips untuk memaksimalkan keuntungan menggunakan Bonafit Payment, atau jelaskan istilah keuangan/digital terkait (misalnya, PPOB, Multifinance, E-Money) dalam bahasa Indonesia yang mudah dipahami.";
+            const systemPrompt = "Bertindaklah sebagai perwakilan **Customer Support** yang profesional, ramah, dan sigap dari Bonafit Payment. Tugas utama Anda adalah membantu pengguna dengan pertanyaan mengenai produk, status transaksi, informasi akun, dan keandalan sistem kami. Selalu pertahankan nada yang membantu, jelas, dan meyakinkan. Prioritaskan solusi praktis, panduan langkah demi langkah, dan penjelasan produk dan proses PPOB Bonafit Payment dalam Bahasa Indonesia yang mudah dipahami. Jika pertanyaan memerlukan data akun spesifik atau real-time (yang tidak dapat Anda akses), mohon arahkan pengguna untuk menghubungi saluran layanan pelanggan resmi kami untuk alasan keamanan.";
 
+            // 3. Send the entire conversation history in the payload
             const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                // Use Google Search grounding for real-time and up-to-date business/finance tips
+                contents: chatHistory, 
                 tools: [{ "google_search": {} }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                config: {
-                    temperature: 0.7, // Slightly creative for idea generation
-                }
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                config: { temperature: 0.7 }
             };
 
             try {
@@ -473,106 +353,74 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    // Log response details to the console if it's not OK
-                    const errorText = await response.text();
-                    console.error("Kesalahan Respon API (Body):", errorText);
-
-                    let errorMessage = `Kesalahan API: ${response.status} ${response.statusText}`;
-                    if (response.status === 401 || response.status === 403) {
-                         errorMessage = "Autentikasi Gagal. (Kode 401/403). Pastikan API Key di Canvas valid.";
-                    }
-                    throw new Error(errorMessage);
-                }
+                if (!response.ok) { throw new Error(`API Error: ${response.status} ${response.statusText}`); }
 
                 const result = await response.json();
                 const candidate = result.candidates?.[0];
 
-                let generatedText = "Maaf, saya tidak dapat menghasilkan respons yang valid. Coba pertanyaan lain.";
-                let sources = [];
+                let generatedText = "Mohon maaf, terjadi kesalahan jaringan. Kami sedang memperbaikinya. Silakan coba lagi.";
+                let fetchedSources = [];
 
+                // 4. Extract generated text and update history
                 if (candidate && candidate.content?.parts?.[0]?.text) {
                     generatedText = candidate.content.parts[0].text;
+                    
+                    // Add model response to history for the next turn
+                    chatHistory.push({ role: "model", parts: [{ text: generatedText }] });
 
-                    // Extract grounding sources
                     const groundingMetadata = candidate.groundingMetadata;
                     if (groundingMetadata && groundingMetadata.groundingAttributions) {
-                        sources = groundingMetadata.groundingAttributions
-                            .map(attribution => ({
-                                uri: attribution.web?.uri,
-                                title: attribution.web?.title,
-                            }))
+                        fetchedSources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({ uri: attribution.web?.uri, title: attribution.web?.title }))
                             .filter(source => source.uri && source.title);
                     }
-                }
-
-                // Display the result
-                aiOutputDiv.innerHTML = generatedText.replace(/\n/g, '<br>');
-
-                // Display sources
-                if (sources.length > 0) {
-                    aiSourcesDiv.classList.remove('hidden');
-                    sourcesList.innerHTML = sources.map(source => 
-                        `<li><a href="${source.uri}" target="_blank" class="text-bonafit-primary hover:underline">${source.title}</a></li>`
-                    ).join('');
                 } else {
-                    aiSourcesDiv.classList.add('hidden');
+                    // Push error message to history if generation failed
+                    chatHistory.push({ role: "model", parts: [{ text: generatedText }] });
                 }
+                
+                // 5. Render the full, updated history and sources
+                document.getElementById('typing-indicator')?.remove();
+                
+                if (fetchedSources.length > 0) {
+                    sourcesList.innerHTML = ''; 
+                    fetchedSources.forEach(source => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${source.uri}" target="_blank" rel="noopener noreferrer" class="text-bonafit-primary hover:underline">${source.title}</a>`;
+                        sourcesList.appendChild(li);
+                    });
+                    sourcesContainer.classList.remove('hidden');
+                } else {
+                    sourcesContainer.classList.add('hidden');
+                }
+                
+                renderChat();
 
             } catch (error) {
-                // Display user-friendly error message
-                aiOutputDiv.innerHTML = `<p class="text-red-500">Terjadi kesalahan: ${error.message}</p>`;
-                aiSourcesDiv.classList.add('hidden');
-                console.error("Gemini API Error (Catch):", error);
+                document.getElementById('typing-indicator')?.remove();
+                const errorMessage = `Mohon maaf, terjadi kesalahan: ${error.message}. Kami sarankan Anda menghubungi layanan support resmi kami.`;
+                chatHistory.push({ role: "model", parts: [{ text: errorMessage }] });
+                renderChat();
+                sourcesContainer.classList.add('hidden');
             } finally {
-                // UI state: Ready
-                aiGenerateBtn.disabled = false;
-                btnText.classList.remove('hidden');
-                btnLoader.classList.add('hidden');
+                setLoadingState(false);
             }
         }
-        
-        // Allow pressing Enter key to generate the idea
-        aiPromptInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                generateIdea();
-            }
-        });
 
-        // --- NEW ANIMATION LOGIC ---
-        const symbols = ['📱', '⚡', '💧', '💳', '🎮', '📶', '💵', '💰', '🔑', '⭐']; 
-        const container = document.getElementById('transaction-flow-container');
-        const numItems = 25; // Jumlah ikon yang mengambang
-
-        function createAnimatedItems() {
-            if (!container) return; // Safety check
-
-            for (let i = 0; i < numItems; i++) {
-                const item = document.createElement('div');
-                item.classList.add('item');
-                
-                // Pilih simbol secara acak (Pulsa, PLN, PDAM, E-Money, dll.)
-                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-                item.textContent = symbol;
-
-                // Randomize timing and position for a staggered effect
-                const startLeft = Math.random() * 100; // 0% to 100% width
-                const animationDuration = 10 + Math.random() * 10; // 10s to 20s
-                const animationDelay = Math.random() * 20; // 0s to 20s delay for infinite loop stagger
-
-                item.style.left = `${startLeft}vw`;
-                item.style.bottom = '0vh'; // Mulai dari bawah layar
-                item.style.animationDuration = `${animationDuration}s`;
-                item.style.animationDelay = `${animationDelay}s`;
-                
-                container.appendChild(item);
-            }
-        }
-        
-        // Panggil fungsi untuk membuat animasi setelah dokumen dimuat
-        window.addEventListener('load', createAnimatedItems);
-
+        // --- Initialization ---
+        window.onload = function () {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            renderChat(); // Show the initial greeting
+            
+            // Event Listeners
+            generateButton.addEventListener('click', generateIdea);
+            promptInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    generateIdea();
+                }
+            });
+        };
     </script>
 </body>
 </html>
